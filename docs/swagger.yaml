@@ -1,10 +1,193 @@
+definitions:
+  models.Article:
+    properties:
+      content:
+        type: string
+      title:
+        type: string
+    type: object
+  models.CreateArticle:
+    properties:
+      content:
+        type: string
+      title:
+        maxLength: 256
+        type: string
+    required:
+    - content
+    - title
+    type: object
+  models.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  models.UpdateArticle:
+    properties:
+      content:
+        type: string
+      title:
+        maxLength: 256
+        type: string
+    required:
+    - content
+    - title
+    type: object
 info:
   contact: {}
-  description: This is the course forum api documentation
-  license:
-    name: MIT License
-    url: https://github.com/Kevin-Shen-and-Cipher/course-forum-forum-servcie/blob/main/LICENSE
-  title: Course forum API
+  description: This is the Backend Intern Homework api documentation
+  title: Backend Intern Homework API
   version: "1.0"
-paths: {}
+paths:
+  /articles:
+    get:
+      consumes:
+      - application/json
+      description: Get all articles
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Article'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Get all articles
+      tags:
+      - articles
+    post:
+      consumes:
+      - application/json
+      description: Create a article
+      parameters:
+      - description: Create article request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.CreateArticle'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Article'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Create article
+      tags:
+      - articles
+  /articles/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a article
+      parameters:
+      - description: Article ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Delete article
+      tags:
+      - articles
+    get:
+      consumes:
+      - application/json
+      description: Find a article
+      parameters:
+      - description: Article ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Article'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Find article
+      tags:
+      - articles
+    patch:
+      consumes:
+      - application/json
+      description: Update a article
+      parameters:
+      - description: Article ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Update article request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.UpdateArticle'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Article'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Update article
+      tags:
+      - articles
 swagger: "2.0"
