@@ -1,0 +1,39 @@
+version: "3.8"
+
+services:
+  backend:
+    container_name: dev_backend
+    build:  
+      context: .
+      dockerfile: Dockerfile-dev
+    volumes:
+      - .:/app
+    ports:
+      - ${SERVER_PORT}:${SERVER_PORT}
+    networks:
+      - backend-bridge
+    depends_on:
+      - db
+    links:
+      - db:db
+    restart: always
+    tty: true
+
+  db:
+    container_name: dev_db
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    ports:
+      - ${DB_PORT}:${DB_PORT}
+    volumes:
+      - ./dev_db:/var/lib/postgresql/data/
+    networks:
+      - backend-bridge
+    restart: always
+
+networks:
+  backend-bridge:
+    driver: bridge
