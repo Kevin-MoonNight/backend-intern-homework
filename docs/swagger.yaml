@@ -17,6 +17,15 @@ definitions:
     - content
     - title
     type: object
+  models.CreateList:
+    properties:
+      name:
+        type: string
+      next_page_key:
+        type: string
+    required:
+    - name
+    type: object
   models.CreatePage:
     properties:
       article_ids:
@@ -32,6 +41,17 @@ definitions:
     properties:
       error:
         type: string
+    type: object
+  models.List:
+    properties:
+      key:
+        type: string
+      name:
+        type: string
+      next_page_key:
+        type: string
+    required:
+    - name
     type: object
   models.Page:
     properties:
@@ -54,6 +74,15 @@ definitions:
     required:
     - content
     - title
+    type: object
+  models.UpdateList:
+    properties:
+      name:
+        type: string
+      next_page_key:
+        type: string
+    required:
+    - name
     type: object
   models.UpdatePage:
     properties:
@@ -223,6 +252,157 @@ paths:
       summary: Update article
       tags:
       - articles
+  /lists:
+    get:
+      consumes:
+      - application/json
+      description: Get all lists
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.List'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Get all lists
+      tags:
+      - lists
+    post:
+      consumes:
+      - application/json
+      description: Create a list
+      parameters:
+      - description: Create list request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.CreateList'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.List'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Create list
+      tags:
+      - lists
+  /lists/{key}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a list
+      parameters:
+      - description: List Key
+        in: path
+        name: key
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Delete list
+      tags:
+      - lists
+    get:
+      consumes:
+      - application/json
+      description: Get a list
+      parameters:
+      - description: List Key
+        in: path
+        name: key
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.List'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Get list
+      tags:
+      - lists
+    patch:
+      consumes:
+      - application/json
+      description: Update a list
+      parameters:
+      - description: List Key
+        in: path
+        name: key
+        required: true
+        type: string
+      - description: Update list request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.UpdateList'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.List'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Update list
+      tags:
+      - lists
   /pages:
     get:
       consumes:

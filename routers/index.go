@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	articleController "backend-intern-homework/controllers/article"
+	listController "backend-intern-homework/controllers/list"
 	pageController "backend-intern-homework/controllers/page"
 
 	docs "backend-intern-homework/docs"
@@ -24,6 +25,7 @@ func RegisterRoutes(route *gin.Engine) {
 	baseRoute := route.Group("/api/v1")
 	registerArticleRoutes(baseRoute)
 	registerPageRoutes(baseRoute)
+	registerListRoutes(baseRoute)
 }
 
 func registerSwaggerRoutes(route *gin.Engine) {
@@ -50,5 +52,16 @@ func registerPageRoutes(route *gin.RouterGroup) {
 		pageRoute.GET("/:key", pageController.GetPage)
 		pageRoute.PATCH("/:key", pageController.UpdatePage)
 		pageRoute.DELETE("/:key", pageController.DeletePage)
+	}
+}
+
+func registerListRoutes(route *gin.RouterGroup) {
+	listRoute := route.Group("/lists")
+	{
+		listRoute.GET("/", listController.GetLists)
+		listRoute.POST("/", listController.CreateList)
+		listRoute.GET("/:key", listController.GetList)
+		listRoute.PATCH("/:key", listController.UpdateList)
+		listRoute.DELETE("/:key", listController.DeleteList)
 	}
 }
