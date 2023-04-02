@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	articleController "backend-intern-homework/controllers/article"
+	pageController "backend-intern-homework/controllers/page"
 
 	docs "backend-intern-homework/docs"
 
@@ -22,6 +23,7 @@ func RegisterRoutes(route *gin.Engine) {
 
 	baseRoute := route.Group("/api/v1")
 	registerArticleRoutes(baseRoute)
+	registerPageRoutes(baseRoute)
 }
 
 func registerSwaggerRoutes(route *gin.Engine) {
@@ -37,5 +39,16 @@ func registerArticleRoutes(route *gin.RouterGroup) {
 		articleRoute.GET("/:id", articleController.FindArticle)
 		articleRoute.PATCH("/:id", articleController.UpdateArticle)
 		articleRoute.DELETE("/:id", articleController.DeleteArticle)
+	}
+}
+
+func registerPageRoutes(route *gin.RouterGroup) {
+	pageRoute := route.Group("/pages")
+	{
+		pageRoute.GET("/", pageController.GetPages)
+		pageRoute.POST("/", pageController.CreatePage)
+		pageRoute.GET("/:key", pageController.GetPage)
+		pageRoute.PATCH("/:key", pageController.UpdatePage)
+		pageRoute.DELETE("/:key", pageController.DeletePage)
 	}
 }

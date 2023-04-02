@@ -17,9 +17,31 @@ definitions:
     - content
     - title
     type: object
+  models.CreatePage:
+    properties:
+      article_ids:
+        items:
+          type: integer
+        type: array
+      next_page_key:
+        type: string
+    required:
+    - article_ids
+    type: object
   models.ErrorResponse:
     properties:
       error:
+        type: string
+    type: object
+  models.Page:
+    properties:
+      articles:
+        items:
+          $ref: '#/definitions/models.Article'
+        type: array
+      key:
+        type: string
+      next_page_key:
         type: string
     type: object
   models.UpdateArticle:
@@ -32,6 +54,17 @@ definitions:
     required:
     - content
     - title
+    type: object
+  models.UpdatePage:
+    properties:
+      article_ids:
+        items:
+          type: integer
+        type: array
+      next_page_key:
+        type: string
+    required:
+    - article_ids
     type: object
 info:
   contact: {}
@@ -190,4 +223,155 @@ paths:
       summary: Update article
       tags:
       - articles
+  /pages:
+    get:
+      consumes:
+      - application/json
+      description: Get all pages
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Page'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Get all pages
+      tags:
+      - pages
+    post:
+      consumes:
+      - application/json
+      description: Create a page
+      parameters:
+      - description: Create page request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.CreatePage'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Page'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Create page
+      tags:
+      - pages
+  /pages/{key}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a page
+      parameters:
+      - description: Page Key
+        in: path
+        name: key
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Delete page
+      tags:
+      - pages
+    get:
+      consumes:
+      - application/json
+      description: Get a page
+      parameters:
+      - description: Page Key
+        in: path
+        name: key
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Page'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Get page
+      tags:
+      - pages
+    patch:
+      consumes:
+      - application/json
+      description: Update a page
+      parameters:
+      - description: Page Key
+        in: path
+        name: key
+        required: true
+        type: string
+      - description: Update page request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.UpdatePage'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Page'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Update page
+      tags:
+      - pages
 swagger: "2.0"

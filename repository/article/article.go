@@ -5,39 +5,43 @@ import (
 	"backend-intern-homework/models"
 )
 
-func GetArticles() (Articles []models.Article, err error) {
-	err = database.DB.Find(&Articles).Order("id DESC").Error
+func GetArticles(conds ...interface{}) (articles []models.Article, err error) {
+	if len(conds) == 0 {
+		err = database.DB.Find(&articles).Order("id DESC").Error
+	} else {
+		err = database.DB.Find(&articles, conds[0]).Order("id DESC").Error
+	}
 
-	return Articles, err
+	return articles, err
 }
 
-func FindArticle(id uint) (Article *models.Article, err error) {
-	err = database.DB.First(&Article, id).Error
+func FindArticle(id uint) (article *models.Article, err error) {
+	err = database.DB.First(&article, id).Error
 
-	return Article, err
+	return article, err
 }
 
-func CreateArticle(Article *models.Article) (err error) {
-	err = database.DB.Create(&Article).Error
+func CreateArticle(article *models.Article) (err error) {
+	err = database.DB.Create(&article).Error
 
 	return err
 }
 
-func UpdateArticle(Article *models.Article) (err error) {
-	err = database.DB.First(&models.Article{}, Article.ID).Error
+func UpdateArticle(article *models.Article) (err error) {
+	err = database.DB.First(&models.Article{}, article.ID).Error
 
 	if err == nil {
-		err = database.DB.Updates(&Article).Error
+		err = database.DB.Updates(&article).Error
 	}
 
 	return err
 }
 
-func DeleteArticle(Article *models.Article) (err error) {
-	err = database.DB.First(&models.Article{}, Article.ID).Error
+func DeleteArticle(article *models.Article) (err error) {
+	err = database.DB.First(&models.Article{}, article.ID).Error
 
 	if err == nil {
-		err = database.DB.Delete(&Article).Error
+		err = database.DB.Delete(&article).Error
 	}
 
 	return err
